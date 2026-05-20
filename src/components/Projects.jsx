@@ -105,8 +105,31 @@ const Projects = () => {
       }
     };
 
-    fetchProjects();
   }, []);
+
+  // 💡 Memicu animasi masuk secara staggered saat di-scroll
+  useEffect(() => {
+    if (loading || projects.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target); // Animasi masuk cukup sekali saja saat pertama kali scroll
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach((card) => observer.observe(card));
+
+    return () => {
+      cards.forEach((card) => observer.unobserve(card));
+    };
+  }, [projects, loading]);
 
   return (
     <section className="projects-section" id="work">
@@ -143,7 +166,7 @@ const Projects = () => {
                   </div>
                   <h3>{title}</h3>
                   <p>{desc}</p>
-                  <a href={project.project_url || "#"} className="view-case">{t("View Case", "ケースを見る")} <span>→</span></a>
+                  <a href={project.project_url || "#"} className="view-case">{t("View Case", "ケースを見る")} <span className="arrow">→</span></a>
                 </div>
               </div>
             );
