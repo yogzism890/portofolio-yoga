@@ -2096,7 +2096,7 @@ body.jp-mode {
   z-index: 9000;
   transition: box-shadow 0.2s ease;
   touch-action: none;
-  animation: sp-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: sp-slide-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .sp-container.sp-dragging {
@@ -2125,10 +2125,10 @@ body.jp-mode {
   flex: 1;
 }
 
-/* ── VINYL ── */
+/* ── VINYL ICON (SVG) ── */
 .sp-vinyl-icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -2136,11 +2136,12 @@ body.jp-mode {
   border: 2px solid var(--lime);
   border-radius: 50%;
   background: var(--black);
-  transition: border-color 0.3s;
+  color: var(--lime);
+  transition: border-color 0.3s, color 0.3s;
 }
 
 .sp-vinyl-icon.sp-vinyl-spinning {
-  animation: vinyl-spin 3s linear infinite;
+  animation: vinyl-spin 4s linear infinite;
 }
 
 .sp-vinyl-icon:not(.sp-vinyl-spinning) {
@@ -2150,14 +2151,6 @@ body.jp-mode {
 @keyframes vinyl-spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
-}
-
-.sp-vinyl-disc {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--lime) 30%, transparent 30%), var(--black);
-  border: 1.5px solid var(--lime);
 }
 
 /* ── TITLE MARQUEE ── */
@@ -2337,22 +2330,28 @@ body.jp-mode {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .sp-open-link:hover {
   color: var(--cyan);
 }
 
-/* ── SLIDE-IN ANIMATION on mount ── */
+.sp-open-link svg {
+  flex-shrink: 0;
+}
 
+/* ── SLIDE-IN ANIMATION on mount ── */
 @keyframes sp-slide-in {
   from {
     opacity: 0;
-    transform: translate(calc(-100% + 0px - 1.5rem + 30px), 20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
-    transform: translate(calc(-100% + 0px - 1.5rem), 0px);
+    transform: translateY(0);
   }
 }
 

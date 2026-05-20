@@ -43,7 +43,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
-      <SpotifyPlayer />
+      <SpotifyPlayer isLoaded={loaded} />
     </>
   );
 }
