@@ -9,6 +9,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
 import AdminDashboard from './components/AdminDashboard';
+import CustomCursor from './components/CustomCursor';
 import './index.css';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
 
   return (
     <>
+      <CustomCursor />
       {!loaded && <LoadingScreen onFinish={() => setLoaded(true)} />}
       <Navbar />
       <main>
