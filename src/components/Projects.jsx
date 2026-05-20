@@ -1,53 +1,112 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { supabase } from '../utils/supabaseClient';
 
 const Projects = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const PROJECT_DATA = [
+  // Data statis sebagai fallback jika Supabase belum terkonfigurasi / terjadi error
+  const STATIC_PROJECTS = [
     {
-      title: t("NEXUS PAY SYSTEM", "ネクサス・ペイ・システム"),
-      tags: [t("FINTECH", "フィンテック"), "2024"],
+      id: 'static-1',
+      title_en: "NEXUS PAY SYSTEM",
+      title_ja: "ネクサス・ペイ・システム",
+      tags: ["FINTECH", "2024"],
       color: "var(--lime)",
-      desc: t("A brutalist redesign of a banking dashboard. Rejecting soft shadows for hard data visualization and uncompromising clarity.", "銀行ダッシュボードのブルータリズム的再設計。柔らかい影を拒絶し、ハードなデータ視覚化と妥協のない明確さを実現。"),
-      img: "https://placehold.co/600x400/111/fff?text=NEXUS+PAY&font=Montserrat"
+      desc_en: "A brutalist redesign of a banking dashboard. Rejecting soft shadows for hard data visualization and uncompromising clarity.",
+      desc_ja: "銀行ダッシュボードのブルータリズム advisers... 柔らかい影を拒絶し、ハードなデータ視覚化と妥協のない明確さを実現。",
+      img_url: "https://placehold.co/600x400/111/fff?text=NEXUS+PAY&font=Montserrat"
     },
     {
-      title: t("BLOCK GRID API", "ブロックグリッド API"),
-      tags: [t("WEB3", "ウェブ3"), t("PROTOCOL", "プロトコル")],
+      id: 'static-2',
+      title_en: "BLOCK GRID API",
+      title_ja: "ブロックグリッド API",
+      tags: ["WEB3", "PROTOCOL"],
       color: "var(--cyan)",
-      desc: t("Developer documentation built like a physical manual. Heavy typography, stark contrasts, and zero fluff.", "物理的なマニュアルのように構築された開発者ドキュメント。重いタイポグラフィ、はっきりとしたコントラスト、無駄のなさ。"),
-      img: "https://placehold.co/600x400/111/fff?text=BLOCK+GRID&font=Montserrat"
+      desc_en: "Developer documentation built like a physical manual. Heavy typography, stark contrasts, and zero fluff.",
+      desc_ja: "物理的なマニュアルのように構築された開発者ドキュメント。重いタイポグラフィ、はっきりとしたコントラスト、無駄のなさ。",
+      img_url: "https://placehold.co/600x400/111/fff?text=BLOCK+GRID&font=Montserrat"
     },
     {
-      title: t("STREET MARKET", "ストリートマーケット"),
-      tags: [t("E-COMMERCE", "Eコマース"), t("APPAREL", "アパレル")],
+      id: 'static-3',
+      title_en: "STREET MARKET",
+      title_ja: "ストリートマーケット",
+      tags: ["E-COMMERCE", "APPAREL"],
       color: "#ffe1e1",
-      desc: t("An experimental storefront for underground streetwear. Navigation is treated as a spatial puzzle with heavy borders.", "アンダーグラウンド・ストリートウェアの実験的な店舗。ナビゲーションは太い境界線を持つ空間パズルとして扱われる。"),
-      img: "https://placehold.co/600x400/111/fff?text=STREET+MARKET&font=Montserrat"
+      desc_en: "An experimental storefront for underground streetwear. Navigation is treated as a spatial puzzle with heavy borders.",
+      desc_ja: "アンダーグラウンド・ストリートウェアの実験的な店舗。ナビゲーションは太い境界線を持つ空間パズルとして扱われる。",
+      img_url: "https://placehold.co/600x400/111/fff?text=STREET+MARKET&font=Montserrat"
     },
     {
-      title: t("SYNTH OS CORE", "シンセ OS コア"),
-      tags: [t("HARDWARE", "ハードウェア"), t("DASHBOARD", "ダッシュボード")],
+      id: 'static-4',
+      title_en: "SYNTH OS CORE",
+      title_ja: "シンセ OS コア",
+      tags: ["HARDWARE", "DASHBOARD"],
       color: "#ffe1e1",
-      desc: t("Control interface for a hardware synthesizer. Designed to mimic the tactile, chunky feel of physical knobs and switches.", "ハードウェア・シンセサイザーの制御インターフェース。物理的なノブとスイッチの触覚的で分厚い感触を模倣するよう設計。"),
-      img: "https://placehold.co/600x400/111/fff?text=SYNTH+OS&font=Montserrat"
+      desc_en: "Control interface for a hardware synthesizer. Designed to mimic the tactile, chunky feel of physical knobs and switches.",
+      desc_ja: "ハードウェア・シンセサイザーの制御インターフェース。物理的なノブ dan スイッチの触覚的で分厚い感触を模倣するよう設計。",
+      img_url: "https://placehold.co/600x400/111/fff?text=SYNTH+OS&font=Montserrat"
     },
     {
-      title: t("VOID MAGAZINE", "ヴォイドマガジン"),
-      tags: [t("BRANDING", "ブランディング"), t("PRINT", "プリント")],
+      id: 'static-5',
+      title_en: "VOID MAGAZINE",
+      title_ja: "ヴォイドマガジン",
+      tags: ["BRANDING", "PRINT"],
       color: "var(--white)",
-      desc: t("An editorial layout system built on a rigid 12-column grid. Emphasizes void space and overwhelming typographical scale.", "厳密な12カラムグリッドに基づく編集レイアウトシステム。空白と圧倒的なタイポグラフィのスケールを強調。"),
-      img: "https://placehold.co/600x400/111/fff?text=VOID+MAGAZINE&font=Montserrat"
+      desc_en: "An editorial layout system built on a rigid 12-column grid. Emphasizes void space and overwhelming typographical scale.",
+      desc_ja: "厳密な12カラムグリッドに基づく編集レイアウトシステム。空白と圧倒的なタイポグラフィのスケールを強調。",
+      img_url: "https://placehold.co/600x400/111/fff?text=VOID+MAGAZINE&font=Montserrat"
     },
     {
-      title: t("TERMINAL THEME", "ターミナルテーマ"),
-      tags: [t("OPEN SOURCE", "オープンソース")],
+      id: 'static-6',
+      title_en: "TERMINAL THEME",
+      title_ja: "ターミナルテーマ",
+      tags: ["OPEN SOURCE"],
       color: "var(--lime)",
-      desc: t("A high-contrast code editor theme designed for maximum legibility and zero distraction. Strictly black, white, and primary colors.", "最大の可読性と気を散らさないよう設計された高コントラストのコードエディタテーマ。厳密に黒、白、原色のみ。"),
-      img: "https://placehold.co/600x400/111/fff?text=TERMINAL&font=Montserrat"
+      desc_en: "A high-contrast code editor theme designed for maximum legibility and zero distraction. Strictly black, white, and primary colors.",
+      desc_ja: "最大の可読性と気を散らさないよう設計された高コントラストのコードエディタテーマ。厳密に黒、白、原色のみ。",
+      img_url: "https://placehold.co/600x400/111/fff?text=TERMINAL&font=Montserrat"
     }
   ];
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const isConfigured = 
+          import.meta.env.VITE_SUPABASE_URL && 
+          import.meta.env.VITE_SUPABASE_URL !== 'your_supabase_project_url_here' &&
+          import.meta.env.VITE_SUPABASE_ANON_KEY &&
+          import.meta.env.VITE_SUPABASE_ANON_KEY !== 'your_supabase_anon_key_here';
+
+        if (!isConfigured) {
+          setProjects(STATIC_PROJECTS);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .order('order_index', { ascending: true });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          setProjects(data);
+        } else {
+          setProjects(STATIC_PROJECTS);
+        }
+      } catch (err) {
+        console.warn("Supabase fetch failed, using local static data fallback:", err);
+        setProjects(STATIC_PROJECTS);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   return (
     <section className="projects-section" id="work">
@@ -58,23 +117,35 @@ const Projects = () => {
         </p>
       </div>
       
-      <div className="projects-grid">
-        {PROJECT_DATA.map((project, idx) => (
-          <div key={idx} className="project-card neo-border neo-shadow">
-            <img src={project.img} alt={project.title} className="project-img" />
-            <div className="project-content" style={{ backgroundColor: project.color }}>
-              <div className="project-tags">
-                {project.tags.map((tag, i) => (
-                  <span key={i} className="tag">{tag}</span>
-                ))}
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '3rem', fontSize: '1.2rem', fontFamily: 'monospace' }}>
+          LOADING WORKS_DATA...
+        </div>
+      ) : (
+        <div className="projects-grid">
+          {projects.map((project, idx) => {
+            const title = language === 'ja' ? project.title_ja : project.title_en;
+            const desc = language === 'ja' ? project.desc_ja : project.desc_en;
+            const tags = Array.isArray(project.tags) ? project.tags : [];
+
+            return (
+              <div key={project.id || idx} className="project-card neo-border neo-shadow">
+                <img src={project.img_url} alt={title} className="project-img" />
+                <div className="project-content" style={{ backgroundColor: project.color }}>
+                  <div className="project-tags">
+                    {tags.map((tag, i) => (
+                      <span key={i} className="tag">{tag}</span>
+                    ))}
+                  </div>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                  <a href={project.project_url || "#"} className="view-case">{t("View Case", "ケースを見る")} <span>→</span></a>
+                </div>
               </div>
-              <h3>{project.title}</h3>
-              <p>{project.desc}</p>
-              <a href="#" className="view-case">{t("View Case", "ケースを見る")} <span>→</span></a>
-            </div>
-          </div>
-        ))}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 };
