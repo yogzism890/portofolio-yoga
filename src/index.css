@@ -661,18 +661,113 @@ main {
   height: 100%;
 }
 
-.project-img {
+.project-img-wrapper {
+  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 250px;
-  object-fit: cover;
   border-bottom: var(--border-width) solid var(--border-color);
   background-color: var(--black);
+}
+
+.project-img-wrapper .project-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
   filter: grayscale(100%) contrast(120%);
   transition: filter 0.3s ease;
 }
 
 .project-card:hover .project-img {
   filter: grayscale(0%) contrast(100%);
+}
+
+/* Glitch layers absolute duplicate styling */
+.project-img-wrapper .glitch-r,
+.project-img-wrapper .glitch-b {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+/* Red / Cyan Split filters */
+.project-img-wrapper .glitch-r {
+  filter: grayscale(0%) contrast(110%) hue-rotate(0deg) saturate(1.5);
+}
+
+.project-img-wrapper .glitch-b {
+  filter: grayscale(0%) contrast(110%) hue-rotate(180deg) saturate(1.5);
+}
+
+/* Trigger glitch animation only on hover */
+.project-card:hover .glitch-r {
+  opacity: 0.85;
+  animation: glitch-anim-1 0.4s steps(2, start) infinite;
+}
+
+.project-card:hover .glitch-b {
+  opacity: 0.85;
+  animation: glitch-anim-2 0.4s steps(2, start) infinite;
+}
+
+/* High-speed horizontal clipping keyframes for VHS glitch */
+@keyframes glitch-anim-1 {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+    transform: translate(-5px, -3px);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+    transform: translate(3px, 2px);
+  }
+  40% {
+    clip-path: inset(5% 0 88% 0);
+    transform: translate(-3px, 4px);
+  }
+  60% {
+    clip-path: inset(78% 0 15% 0);
+    transform: translate(4px, -2px);
+  }
+  80% {
+    clip-path: inset(12% 0 78% 0);
+    transform: translate(-2px, -3px);
+  }
+  100% {
+    clip-path: inset(55% 0 32% 0);
+    transform: translate(3px, 3px);
+  }
+}
+
+@keyframes glitch-anim-2 {
+  0% {
+    clip-path: inset(25% 0 58% 0);
+    transform: translate(5px, 3px);
+  }
+  20% {
+    clip-path: inset(70% 0 12% 0);
+    transform: translate(-3px, -2px);
+  }
+  40% {
+    clip-path: inset(85% 0 5% 0);
+    transform: translate(3px, -4px);
+  }
+  60% {
+    clip-path: inset(15% 0 78% 0);
+    transform: translate(-4px, 2px);
+  }
+  80% {
+    clip-path: inset(62% 0 28% 0);
+    transform: translate(2px, 3px);
+  }
+  100% {
+    clip-path: inset(45% 0 45% 0);
+    transform: translate(-3px, -3px);
+  }
 }
 
 .project-content {

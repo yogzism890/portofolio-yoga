@@ -130,7 +130,11 @@ const Projects = () => {
 
             return (
               <div key={project.id || idx} className="project-card neo-border neo-shadow">
-                <img src={project.img_url} alt={title} className="project-img" />
+                <div className="project-img-wrapper">
+                  <img src={project.img_url} alt={title} className="project-img" />
+                  <img src={project.img_url} alt={title} className="project-img glitch-r" aria-hidden="true" />
+                  <img src={project.img_url} alt={title} className="project-img glitch-b" aria-hidden="true" />
+                </div>
                 <div className="project-content" style={{ backgroundColor: project.color }}>
                   <div className="project-tags">
                     {tags.map((tag, i) => (
