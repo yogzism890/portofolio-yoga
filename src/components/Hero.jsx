@@ -56,7 +56,7 @@ const Hero = () => {
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
+
     const timer = setInterval(() => setTime(new Date()), 1000);
 
     return () => {
@@ -91,7 +91,7 @@ const Hero = () => {
       <DraggableSticker text={t("DRAG ME :)", "ドラッグして :)")} className="sticker-3" color="var(--lime)" rotation={-12} />
 
       {/* ── EASTER EGG TRIGGER ── */}
-      <div 
+      <div
         className="easter-egg-zone"
         onClick={toggleLanguage}
         title="Secret Button"
@@ -106,7 +106,7 @@ const Hero = () => {
       {/* ── LEFT COLUMN ── */}
       <div className="hero-left">
         <h1 className="hero-title">
-          <span>{t("CREATIVE", "クリエイティブ")}</span>
+          <span>{t("VIBE CODER", "ヴァイブコーダー")}</span>
           <span className="text-outline">{t("DEV &", "開発者 &")}</span>
           <span>{t("DESIGNER", "デザイナー")}</span>
         </h1>

@@ -7,10 +7,10 @@ const Marquee = () => {
         {[...Array(4)].map((_, i) => (
           <React.Fragment key={i}>
             <div className="marquee-item">
-              PRAYOGA AFFANDI <span className="marquee-star">✦</span>
+              PRAYOGA AFFANDI <span className="marquee-star"></span>
             </div>
             <div className="marquee-item">
-              プラヨガアッファンヂ <span className="marquee-star">✦</span>
+              プラヨガアッファンヂ <span className="marquee-star"></span>
             </div>
           </React.Fragment>
         ))}

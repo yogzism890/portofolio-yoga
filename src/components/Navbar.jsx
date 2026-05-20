@@ -7,6 +7,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="nav-logo">{t("YOGA － ヨガです", "YOGA － ヨガです")}</div>
       <div className="nav-links">
+        <a href="#home">{t("Home", "ホーム")}</a>
         <a href="#work">{t("Work", "ワーク")}</a>
         <a href="#about">{t("About", "アバウト")}</a>
         <a href="#services">{t("Services", "サービス")}</a>
