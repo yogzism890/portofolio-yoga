@@ -69,7 +69,7 @@ const Hero = () => {
   const tokyoTime = time.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Tokyo' });
 
   return (
-    <section className="hero-wrapper">
+    <section className="hero-wrapper" id="home">
 
       {/* ── SCATTERED KANJI — menunjukkan belajar 日本語 ── */}
       {/* 日 — hari/matahari, dari 日本語 */}
