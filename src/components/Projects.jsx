@@ -105,6 +105,7 @@ const Projects = () => {
       }
     };
 
+    fetchProjects();
   }, []);
 
   // 💡 Memicu animasi masuk secara staggered saat di-scroll
