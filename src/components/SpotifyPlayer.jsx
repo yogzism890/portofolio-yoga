@@ -50,18 +50,10 @@ const SpotifyPlayer = ({ isLoaded }) => {
   const startPos = useRef({ x: 0, y: 0 });
   const playerRef = useRef(null);
 
-  // Appear only after loading screen is fully done
+  // Appear only after loading screen is fully done — stays minimized
   useEffect(() => {
     if (!isLoaded) return;
-    // Small extra delay for smooth entrance after page appears
-    const t = setTimeout(() => {
-      setIsVisible(true);
-      // Auto-expand after appearing
-      setTimeout(() => {
-        setIsOpen(true);
-        setIframeLoaded(true);
-      }, 600);
-    }, 400);
+    const t = setTimeout(() => setIsVisible(true), 400);
     return () => clearTimeout(t);
   }, [isLoaded]);
 
