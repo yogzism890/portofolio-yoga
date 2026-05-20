@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
 import AdminDashboard from './components/AdminDashboard';
 import CustomCursor from './components/CustomCursor';
+import SpotifyPlayer from './components/SpotifyPlayer';
 import './index.css';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <SpotifyPlayer />
     </>
   );
 }
